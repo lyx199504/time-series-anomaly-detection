@@ -1,0 +1,55 @@
+# 文件夹
+dir:
+  model_dir: ./model  # 模型文件夹
+  log_dir: ./log  # 日志文件夹
+
+# 自定义超参数
+cus_param:
+  seed: 1  # 随机种子
+
+# 贝叶斯搜索超参数
+bys_param:
+  n_iter: 10  # 迭代次数
+  fold: 3  # 交叉验证折数
+  workers: 1  # 进程个数
+
+# 交叉验证参数
+cv_param:
+  fold: 10
+  workers: 1
+
+# 模型超参数
+model:
+  - [lr_clf, {
+      max_iter: !!python/tuple [50, 200],
+      C: !!python/tuple [0.8, 1.2, 'uniform'],
+      random_state: !!python/tuple [1, 500],
+  }]
+  - [svm_clf, {
+      kernel: ['rbf'],
+      gamma: !!python/tuple [0.00001, 1000.0, 'log-uniform'],
+      C: !!python/tuple [0.001, 100000.0, 'log-uniform'],
+      random_state: !!python/tuple [1, 500],
+  }]
+  - [rf_clf, {
+      n_estimators: !!python/tuple [100, 500],
+      max_depth: !!python/tuple [9, 12],
+      random_state: !!python/tuple [1, 500],
+  }]
+  - [dl_clf, {
+      learning_rate: !!python/tuple [0.001, 0.01],
+      epochs: [100],
+      batch_size: [50],
+      random_state: !!python/tuple [1, 500],
+  }]
+  - [rnn_clf, {
+      learning_rate: !!python/tuple [0.01, 0.02],
+      epochs: [100],
+      batch_size: [150],
+      random_state: !!python/tuple [1, 500],
+  }]
+
+multi-model:
+  - [voting, {
+      voting: ['soft'],
+  }]
